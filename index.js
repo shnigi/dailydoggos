@@ -46,6 +46,6 @@ const start = () => {
     });
 };
 
-cron.schedule('15 14 * * *', () => {
+cron.schedule('20 14 * * *', () => {
   start();
 });
