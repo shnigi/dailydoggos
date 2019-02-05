@@ -23,6 +23,7 @@ const postToTwitter = () => {
     }
     else {
       T.post('statuses/update', {media_ids: new Array(data.media_id_string)});
+      console.log('Posted!');
     }
   });
 };
@@ -34,6 +35,7 @@ const downloadDogImage = (dogUrl) => {
 };
 
 const start = () => {
+  console.log('starting dailydoggobot');
   const url = 'https://dog.ceo/api/breeds/image/random';
   fetch(url)
     .then(function (response) {
@@ -44,7 +46,6 @@ const start = () => {
     });
 };
 
-cron.schedule('0 14 * * *', () => {
+cron.schedule('15 14 * * *', () => {
   start();
 });
-start();
