@@ -1,5 +1,9 @@
 const Twit = require('twit');
 const fetch = require("node-fetch");
+const download = require('download');
+const fs = require('fs');
+const path = require('path');
+const cron = require('node-cron');
 
 const T = new Twit({
   consumer_key: 'o3e0umgmfeuUgmmJRXC1bk7xP',
@@ -9,24 +13,38 @@ const T = new Twit({
   timeout_ms: 60 * 1000,
 });
 
-const postToTwitter = (data) => {
-  T.post(
-    'statuses/update',
-    { status: data.message },
-    (err, data, response) => {
-      console.log(err, data, response);
+const postToTwitter = () => {
+  const image_path = path.join(__dirname, './files/dog.jpg');
+  const b64image = fs.readFileSync(image_path, { encoding: 'base64' });
+
+  T.post('media/upload', { media_data: b64image }, (err, data, response) => {
+    if (err) {
+      console.log('ERROR:', err);
     }
-  )
+    else {
+      T.post('statuses/update', {media_ids: new Array(data.media_id_string)});
+    }
+  });
 };
 
-const url = 'https://dog.ceo/api/breeds/image/random';
-fetch(url)
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    console.log(JSON.stringify(data));
-    postToTwitter(data);
+const downloadDogImage = (dogUrl) => {
+  download(dogUrl).pipe(fs.createWriteStream('files/dog.jpg')).on('finish', () => {
+    postToTwitter();
   });
+};
 
+const start = () => {
+  const url = 'https://dog.ceo/api/breeds/image/random';
+  fetch(url)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      downloadDogImage(data.message);
+    });
+};
 
+cron.schedule('0 14 * * *', () => {
+  start();
+});
+start();
