@@ -22,7 +22,10 @@ const postToTwitter = () => {
       console.log('ERROR:', err);
     }
     else {
-      T.post('statuses/update', {media_ids: new Array(data.media_id_string)});
+      T.post('statuses/update', { 
+        status: '#dog #dogs #doggo #dailydogpic #dailydog #dogbot #bot #dailydogbot #doge #doges #doggos #dogepic #dogepics ', 
+        media_ids: new Array(data.media_id_string)
+      });
       console.log('Posted!');
     }
   });
