@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Twit = require('twit');
 const fetch = require("node-fetch");
 const download = require('download');
@@ -6,10 +7,10 @@ const path = require('path');
 const cron = require('node-cron');
 
 const T = new Twit({
-  consumer_key: 'o3e0umgmfeuUgmmJRXC1bk7xP',
-  consumer_secret: 'jMfgjwv1iE1bf1XGG7pmlbTB4blApqUsMD181fIvFcsQkyFMqI',
-  access_token: '1092513253396226050-H3qvEYvV7TA7vuhddZfOhXhnhDmH0Y',
-  access_token_secret: 'sAWaiZykSrFE8lgBzOpew17BhT6CBHwrcLPC8cZf4SRHn',
+  consumer_key: process.env.consumer_key,
+  consumer_secret: process.env.consumer_secret,
+  access_token: process.env.access_token,
+  access_token_secret: process.env.access_token_secret,
   timeout_ms: 60 * 1000,
 });
 
